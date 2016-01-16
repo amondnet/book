@@ -1,0 +1,32 @@
+[
+  {
+    "id": "spot1",
+    "name": "Elements",
+    "tel": "2735 5224",
+    "hours": "10:00 ~ 22:00",
+    "home": "www.elementshk.com",
+    "cost": "가게마다 다름",
+    "address": "1 Austin Road West, Tsim Sha Tsui",
+    "description": "elements elements"
+  },
+  {
+    "id": "spot2",
+    "name": "Hong Kong Museum of Art",
+    "tel": "2271 0116",
+    "hours": "10:00 ~ 18:00",
+    "home": "www.hk.art.museum",
+    "cost": "10 HKD",
+    "address": "10 Salisbury Road, Tsim sha tsui",
+    "description": "elements elements"
+  },
+  {
+    "id": "spot3",
+    "name": "Hong Kong Space Museum",
+    "tel": "2271 0226",
+    "hours": "10:00 ~ 21:00",
+    "home": "www.hk.space.museum",
+    "cost": "10 HKD",
+    "address": "10 Salisbury Road, Tsim sha tsui",
+    "description": "elements elements"
+  }
+]

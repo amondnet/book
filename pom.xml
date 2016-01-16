@@ -63,7 +63,7 @@
     <pluginManagement>
       <plugins>
         <!--This plugin's configuration is used to store settings for the
-            eclipse m2e plugin. It has no influence on the maven build. 
+            eclipse m2e plugin. It has no influence on the maven build.
         -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -123,7 +123,9 @@
       <build>
         <plugins>
           <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
+            <!-- NOTE: We don't need a groupId specification because the group is
+             org.apache.maven.plugins ...which is assumed by default.
+         -->
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
               <tarLongFileMode>gnu</tarLongFileMode>
@@ -145,7 +147,7 @@
       </build>
     </profile>
   </profiles>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -609,6 +611,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.6.3</version>
+    </dependency>
+
   </dependencies>
 
   <repositories>
@@ -663,9 +672,9 @@
       <id>sonatype-nexus-public</id>
       <name>SonaType public snapshots and releases repository</name>
       <url>https://oss.sonatype.org/content/groups/public</url>
-      <releases> 
+      <releases>
           <enabled>true</enabled>
-      </releases> 
+      </releases>
       <snapshots>
           <enabled>true</enabled>
       </snapshots>

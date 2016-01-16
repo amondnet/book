@@ -14,7 +14,7 @@ for jar in ../target/dependency/*.jar;do
  fi
 done
 
-export MEM_ARGS="-Xms2048m -Xmx2048m"
+export MEM_ARGS="-Xms512m -Xmx512m"
 
 RUN_CMD="$JAVA_HOME/bin/java $MEM_ARGS -cp $CLASSPATH com.tamingtext.qa.WikipediaWexIndexer $@"
 echo $RUN_CMD

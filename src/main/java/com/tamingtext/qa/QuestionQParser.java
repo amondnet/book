@@ -44,20 +44,24 @@ import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.schema.SchemaField;
 import org.apache.solr.search.QParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * The QuestionQParser takes in a natural language question and produces a Lucene {@link org.apache.lucene.search.spans.SpanNearQuery}
- *
+ * The QuestionQParser takes in a natural language question and produces a Lucene {@link
+ * org.apache.lucene.search.spans.SpanNearQuery}
  */
-public class QuestionQParser extends QParser implements QAParams  {
+public class QuestionQParser extends QParser implements QAParams {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(QuestionQParser.class);
 
   private Parser parser;
   private AnswerTypeClassifier atc;
-  private Map<String,String> atm;
+  private Map<String, String> atm;
 
   public QuestionQParser(String qstr, SolrParams localParams, SolrParams params, SolrQueryRequest req,
                          Parser parser, AnswerTypeClassifier atc,
-                         Map<String,String> answerTypeMap) {
+                         Map<String, String> answerTypeMap) {
     super(qstr, localParams, params, req);
     this.parser = parser;
     this.atc = atc;
@@ -80,34 +84,50 @@ public class QuestionQParser extends QParser implements QAParams  {
     String mt = atm.get(type);
     //<end id="qqp.answerType"/>
     String field = params.get(QUERY_FIELD);
+
+    LOGGER.info("type: {}", type);
+    LOGGER.info("mt: {}", mt);
+    LOGGER.info("field: {}", field);
+
     SchemaField sp = req.getSchema().getFieldOrNull(field);
     if (sp == null) {
-      throw new SolrException(ErrorCode.SERVER_ERROR,"Undefined field: "+field);
+      throw new SolrException(ErrorCode.SERVER_ERROR, "Undefined field: " + field);
     }
+
+
     //<start id="qqp.query"/>
     List<SpanQuery> sql = new ArrayList<SpanQuery>();
     if (mt != null) {//<co id="qqp.handleAT"/>
       String[] parts = mt.split("\\|");
       if (parts.length == 1) {
+
         sql.add(new SpanTermQuery(new Term(field, mt.toLowerCase())));
       } else {
         for (int pi = 0; pi < parts.length; pi++) {
+
           sql.add(new SpanTermQuery(new Term(field, parts[pi])));
         }
       }
     }
+
     try {
       Analyzer analyzer = sp.getType().getQueryAnalyzer();
       TokenStream ts = analyzer.tokenStream(field,
-              new StringReader(qstr));
+          new StringReader(qstr));
       while (ts.incrementToken()) {//<co id="qqp.addTerms"/>
         String term = ((CharTermAttribute)
-                ts.getAttribute(CharTermAttribute.class)).toString();
+            ts.getAttribute(CharTermAttribute.class)).toString();
+        LOGGER.info("term is {}", term);
         sql.add(new SpanTermQuery(new Term(field, term)));
       }
     } catch (IOException e) {
       throw new ParseException(e.getLocalizedMessage());
     }
+
+    for (SpanQuery sq : sql) {
+      LOGGER.info("sql array {}", sq);
+    }
+
     return new SpanNearQuery(sql.toArray(new SpanQuery[sql.size()]), params.getInt(QAParams.SLOP, 10), true);//<co id="qqp.spanNear"/>
     /*
     <calloutlist>

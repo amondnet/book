@@ -9,8 +9,11 @@
 #end
 <div class="result-document">
   <h2>#field('doctitle')</h2>
-  <div>#field('body')</div>
-  <div>#field('category')</div>
+    <div>#field('name')</div>
+    <div>#field('address')</div>
+    <div>#field('body')</div>
+
+   <div>#field('category')</div>
   
   #if($params.getBool("debugQuery",false))
     <a href="#" onclick='jQuery(this).siblings("pre").toggle(); return false;'>toggle explain</a>
